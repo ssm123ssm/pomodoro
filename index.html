@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<html >
+
+<head>
+  <meta charset="UTF-8">
+  
+  <title>Pomodoro CLock</title>
+  <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative|Poiret+One" rel="stylesheet">
+  
+  
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css'>
+
+      <style>
+      * {
+  color: white;
+}
+
+.bg-standby {
+  border: 10px solid #60e650;
+}
+
+.bg-running {
+  border: 10px solid #9850e6;
+}
+
+.bg-paused {
+  border: 10px solid #e65050;
+}
+
+body {
+  text-align: center;
+  font-family: 'Cinzel Decorative', cursive;
+}
+
+.frame {
+  border: 10px solid #aeb1ae;
+  position: relative;
+  width: 600px;
+  height: 800px;
+  background-color: black;
+  /* margin: 8%; */
+  margin: auto;
+  margin-top: 5%;
+  margin-bottom: 20%;
+  box-shadow: 18px -14px 11px 0px rgba(0, 0, 0, 0.47);
+}
+
+.temp {
+  position: relative;
+  top: -45px;
+}
+
+.main-head h2 {
+  font-size: 4rem;
+}
+
+.reset {
+  margin: auto;
+  margin-top: 80px;
+  width: 200px;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+p {
+  text-align: center;
+  font-size: 20px;
+}
+
+.break {
+  display: block;
+  width: 100px;
+  position: absolute;
+  top: 134px;
+  left: 26px;
+  z-index: 2;
+}
+
+.session {
+  display: block;
+  width: 100px;
+  position: absolute;
+  right: 26px;
+  top: 134px;
+  z-index: 2;
+}
+
+.session p, .break p {
+  font-size: 20px;
+}
+
+.break-plus:hover, .break-minus:hover, .session-plus:hover, .session-minus:hover, .reset p:hover, .outer:hover {
+  cursor: pointer;
+}
+
+.main-head {
+  text-align: center;
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  /* background-color: white; */
+  width: 80%;
+  padding-bottom: 40px;
+  border-bottom: 2px solid white;
+}
+
+.circles {
+  text-align: center;
+  display: block;
+  position: relative;
+  margin: auto;
+  top: 10px;
+  z-index: 0;
+}
+
+.status {
+  margin-top: 10px;
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+.status p {
+  font-size: 17px;
+}
+
+.main-display {
+  position: absolute;
+  width: 250px;
+  display: block;
+  overflow: hidden;
+  top: 138px;
+  left: 173px;
+}
+
+.time {
+  text-align: center;
+  margin: auto;
+}
+
+.time-p {
+  font-size: 70px;
+}
+
+.status {
+  margin-top: 30px;
+}
+
+.status-p {
+  font-size: 40px;
+  position: relative;
+  left: 0px;
+  top: -23px;
+}
+
+.footer {
+  margin-top: 54px;
+  padding-top: 15px;
+  border-top: 1px solid grey;
+}
+
+.footer p {
+  font-size: 15px;
+}
+
+.foot-image {
+  width: 30%;
+  height: auto;
+  margin: auto;
+  position: relative;
+  left: 126px;
+  bottom: 174px;
+}
+
+.inner-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.main-circle {
+  -ms-transform: rotate(112deg);
+  /* IE 9 */
+  -webkit-transform: rotate(112deg);
+  /* Safari */
+  transform: rotate(112deg);
+}
+
+circle {
+  fill: white;
+  stroke: #b250e6;
+  stroke-width: 15;
+  stroke-dasharray: 780, 5000;
+  stroke-dashoffset: 0;
+  stroke-linecap: "round";
+  fill-opacity: 0;
+}
+
+.inner {
+  stroke: grey;
+}
+
+@media screen and (max-width: 640px) {
+  .frame {
+    transform: scale(0.8);
+    margin-top: -63px;
+    margin-left: -50px;
+  }
+}
+@media screen and (max-width: 530px) {
+  .frame {
+    transform: scale(0.7);
+    margin-top: -99px;
+    margin-left: -84px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .frame {
+    transform: scale(0.5);
+    margin-top: -190px;
+    margin-left: -150px;
+  }
+}
+
+    </style>
+
+  
+  
+  
+  
+</head>
+
+<body translate="no" >
+
+  <div class="container-fluid">
+  
+  <audio id="bell" src="https://www.dropbox.com/s/12e57wyxnj7lph8/front-desk-bells-daniel_simon.wav?dl=1" preload="auto"></audio>
+  <div class="frame">
+    
+    <div class="main-head"><h2>POMODORO CLOCK</h2></div>
+    
+    
+    <div class="temp">
+    <div class="reset">
+      <p>RESET</p>
+    </div>
+    <div class="break"><p>BREAK</p>
+      <p class="break-plus adj">+</p>
+      <p class="break-p">5 min</p>
+      <p class="break-minus adj">-</p>
+    </div>
+    <div class="session"><p>SESSION</p>
+    <p class="session-plus adj">+</p>
+      <p class="session-p">25 min</p>
+      <p class="session-minus adj">-</p>
+    
+    </div>  
+    <div class="main-display">  
+      <div class="time">
+        <p class="time-p">00.00</p>
+        <p class="status-p"></p>
+      </div>
+    
+    </div>   
+    <div class="circles">
+  <div class="main-circle">   
+<svg height="300" width="300">
+  <circle class="outer" cx="150" cy="150" r="140"  />
+</svg>
+  </div>
+  </div>   
+    <div class="status"><p class="foot-status">STANDBY</p></div>    
+    <div class="footer"><p style="color: rgba(255, 255, 255, 0.31);">ssm123ssm</p></div>
+    </div>
+      
+  </div>
+  
+</div>
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.0/velocity.js'></script>
+
+    <script>
+    $(document).ready(function() {
+  var main_standby = true;
+  var standby = true;
+  var break_standby = true;
+  var int1, int2;
+  var paused = false;
+  var running = false;
+  var fresh = true;
+  var cur_offset;
+  var inbreak = false;
+  var insession = false;
+  var firstrun = true;
+  
+  function playSound() {
+    document.getElementById('bell').play();
+    console.log("sound");
+}
+  
+ 
+  
+  $(".outer").on("click", function() {
+    if (fresh) {
+      $(".foot-status").html("IN PROGRESS");
+      console.log("run");
+      run();
+      //$(".frame").addClass("bg-running");
+    } else if (paused) {
+      $(".foot-status").html("IN PROGRESS");
+      paused = false;
+      running = true;
+
+      if (insession) {
+        console.log("continuing from insession");
+        var session_ms =
+          parseInt($(".time-p").html().split(".")[0] * 60 * 1000) +
+          parseFloat($(".time-p").html().split(".")[1] * 1000);
+        //console.log(session_ms);
+        $(".outer").velocity(
+          { "stroke-dashoffset": 780 },
+          { duration: session_ms }
+        );
+        int1 = setInterval(decrease, 1000);
+      } else if (inbreak) {
+        console.log("continuing from inbreak");
+        var break_ms =
+          parseInt($(".time-p").html().split(".")[0] * 60 * 1000) +
+          parseFloat($(".time-p").html().split(".")[1] * 1000);
+        $(".outer").velocity(
+          { "stroke-dashoffset": 780 },
+          { duration: break_ms }
+        );
+        int2 = setInterval(decrease_b, 1000);
+      }
+    } else if (running) {
+      // $(".frame").removeClass("bg-running");
+      // $(".frame").addClass("bg-paused");
+      if (insession) {
+        $(".foot-status").html("PAUSED IN SESSION");
+      } else {
+        $(".foot-status").html("PAUSED IN BREAK");
+      }
+      $("circle").velocity("stop");
+      cur_offset = $(".outer").css("stroke-dashoffset");
+      //console.log(cur_offset);
+      clearInterval(int1);
+      clearInterval(int2);
+      running = false;
+      paused = true;
+      console.log("paused");
+    }
+  });
+  $(".session-plus").on("click", inc_session);
+  $(".session-minus").on("click", dec_session);
+  $(".break-plus").on("click", inc_break);
+  $(".break-minus").on("click", dec_break);
+  $(".reset").on("click", function() {
+    
+    
+    
+    $(".outer").velocity("stop");
+    clearInterval(int1);
+    clearInterval(int2);
+    $("circle").css("stroke-dashoffset", "0");
+    $(".time-p").html($(".session-p").html().split(" ")[0] + ".00");
+    $(".foot-status").html("STANDBY");
+    $(".status-p").html("");
+    main_standby = true;
+    standby = true;
+    break_standby = true;
+    int1, int2;
+    paused = false;
+    running = false;
+    fresh = true;
+    cur_offset;
+    inbreak = false;
+    insession = false;
+    firstrun = true;
+  });
+
+  var session_time;
+  var break_time;
+
+  var session_seconds;
+  var break_seconds;
+  var session_ms;
+  var break_ms;
+
+  //console.log(session_time);
+  //console.log(break_time);
+  //console.log(session_ms);
+
+  function toMin(val) {
+    var sec = val % 60;
+    var min = parseInt(val / 60);
+    var ret_sec;
+    if (sec.toString().length < 2) {
+      return min.toString() + "." + "0" + sec.toString();
+    }
+    return min.toString() + "." + sec.toString();
+  }
+
+  function inc_session() {
+    if (standby) {
+      var cur = parseInt($(".session-p").html().split(" ")[0]);
+      $(".session-p").html((cur + 5).toString() + " min");
+    }
+  }
+  function dec_session() {
+    if (standby && parseInt($(".session-p").html().split(" ")[0]) > 5) {
+      var cur = parseInt($(".session-p").html().split(" ")[0]);
+      $(".session-p").html((cur - 5).toString() + " min");
+    }
+  }
+  function inc_break() {
+    if (break_standby) {
+      var cur = parseInt($(".break-p").html().split(" ")[0]);
+      $(".break-p").html((cur + 1).toString() + " min");
+    }
+  }
+  function dec_break() {
+    if (break_standby && parseInt($(".break-p").html().split(" ")[0]) > 1) {
+      var cur = parseInt($(".break-p").html().split(" ")[0]);
+      $(".break-p").html((cur - 1).toString() + " min");
+    }
+  }
+
+  function run() {
+    insession = true;
+    inbreak = false;
+    running = true;
+    fresh = false;
+    main_standby = false;
+    standby = false;
+    $("circle").velocity("stop");
+    $(".outer").css("stroke-dashoffset", "0");
+    session_time = parseInt($(".session-p").html().split(" ")[0]);
+    break_time = parseInt($(".break-p").html().split(" ")[0]);
+
+    session_seconds = session_time * 60;
+    break_seconds = break_time * 60;
+    session_ms = session_seconds * 1000;
+
+    var start = $(".session-p").html().split(" ")[0] + "." + "00";
+    console.log(start);
+    var session_ms_cr = session_ms+1000;
+    setTimeout(function(){
+      $(".outer").velocity(
+      { "stroke-dashoffset": 780 },
+      { duration: session_ms_cr,
+      easing: "linear"}
+    );
+    },000);
+    //console.log("running the run function");
+    int1 = setInterval(decrease, 1000);
+    $(".status-p").html("Task");
+
+    // $("circle").velocity({ fill: "#FF0000" }, { duration: t});
+  }
+  function decrease() {
+    
+    // if(firstrun){
+    $(".time-p").html(toMin(session_seconds));
+    //   firstrun = false;
+    // }
+
+    if ($(".time-p").html() != "0.00") {
+      session_seconds--;
+      if(session_seconds <10){
+        
+        $(".time-p").addClass("animated zoomIn");
+        setTimeout(function(){
+          $(".time-p").removeClass("animated zoomIn");
+        },800);
+      }
+    } else {
+      playSound();
+      $(".status-p").html("Break");
+      console.log("entering breaking..");
+      insession = false;
+      inbreak = true;
+      break_time = parseInt($(".break-p").html().split(" ")[0]);
+      break_seconds = break_time * 60;
+      break_ms = break_seconds * 1000;
+      standby = true;
+      break_standby = false;
+      clearInterval(int1);
+
+      int2 = setInterval(decrease_b, 1000);
+      $("circle").velocity("stop");
+      $("circle").css("stroke-dashoffset", "0");
+      console.log($(".outer").css("stroke-dashoffset"));
+      setTimeout(function() {
+        var break_ms_cr = break_ms + 1000;
+        $(".outer").velocity(
+          { "stroke-dashoffset": 780 },
+          { duration: break_ms_cr,
+          easing: "linear"}
+        );
+      }, 000);
+      //console.log("session cleared!");
+    }
+    //console.log(session_seconds);
+  }
+  function decrease_b() {
+    // console.log(break_standby);
+    //break_time = parseInt($(".break-p").html().split(" ")[0]);
+    //break_seconds = break_time * 60;
+    // break_ms = break_seconds * 1000;
+    $(".time-p").html(toMin(break_seconds));
+    if ($(".time-p").html() != "0.00") {
+      break_seconds--;
+      if(break_seconds <10){
+        
+        $(".time-p").addClass("animated zoomIn");
+        setTimeout(function(){
+          $(".time-p").removeClass("animated zoomIn");
+        },800);
+      }
+    } else {
+      playSound();
+      break_standby = true;
+      clearInterval(int2);
+      main_standby = true;
+      
+      ///////////
+      main_standby = true;
+      standby = true;
+      break_standby = true;
+      int1, int2;
+      paused = false;
+      running = false;
+      fresh = true;
+      //var cur_offset;
+      inbreak = false;
+      insession = false;
+      firstrun = true;
+      run();
+      ///////
+
+      //console.log("session cleared!");
+    }
+    //console.log(session_seconds);
+  }
+  function run_break() {
+    insession = false;
+    inbreak = true;
+    break_standby = false;
+    standby = true;
+    $(".outer").css("stroke-dashoffset", "0");
+    break_time = parseInt($(".break-p").html().split(" ")[0]);
+    break_seconds = break_time * 60;
+    break_ms = break_seconds * 1000;
+    var start = $(".break-p").html().split(" ")[0] + "." + "00";
+    $(".outer").velocity({ "stroke-dashoffset": 780 }, { duration: break_ms });
+    int2 = setInterval(decrease_b, 1000);
+  }
+});
+  </script>
+
+  
+  
+
+</body>
+</html>
+ 
